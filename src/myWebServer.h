@@ -3,7 +3,7 @@
 #include <WiFiClient.h>
 #include <ESP8266WebServer.h>
 #include <ESP8266HTTPUpdateServer.h>
-//#include <fs.h>
+#include <fs.h>
 #ifndef common
  #include "common.h"
 #endif 
@@ -37,7 +37,7 @@ bool handleFileRead(String path) {
   if (path.endsWith("/")) path += "index.htm";
   String contentType = getContentType(path);
   String pathWithGz = path + ".gz";
-  /*
+  
   if (SPIFFS.exists(pathWithGz) || SPIFFS.exists(path)) {
     if (SPIFFS.exists(pathWithGz))
       path += ".gz";
@@ -46,7 +46,7 @@ bool handleFileRead(String path) {
     file.close();
     return true;
   }
-  */
+  
   return false;
  }
 
