@@ -1,8 +1,8 @@
 #define myWiFi
 #include <ESP8266WiFi.h>
 #include <WiFiClient.h>
+#include "place.h"
 
-#define work
 
 #ifdef home
 #ifndef STASSID
