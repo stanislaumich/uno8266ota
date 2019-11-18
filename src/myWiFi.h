@@ -2,16 +2,30 @@
 #include <ESP8266WiFi.h>
 #include <WiFiClient.h>
 
+#define work
+
+#ifdef home
+#ifndef STASSID
+#define STASSID "ZTE54"
+#define STAPSK  "121211119"
+#endif
+IPAddress ip(192,168,1,234);  
+IPAddress gateway(192,168,1,1);
+IPAddress subnet(255,255,255,0);
+IPAddress dns1(194,158,196,206);
+IPAddress dns2(194,158,196,205);
+#endif
+#ifdef work
 #ifndef STASSID
 #define STASSID "SAN"
 #define STAPSK  "37212628"
 #endif
-
 IPAddress ip(192,168,0,234);  
 IPAddress gateway(192,168,0,1);
 IPAddress subnet(255,255,255,0);
 IPAddress dns1(194,158,196,137);
 IPAddress dns2(194,158,196,141);
+#endif
 
 
 const char* ssid = STASSID;

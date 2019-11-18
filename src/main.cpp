@@ -19,6 +19,7 @@
 
 
 void setup(void) {
+  initCommon();
   Serial.begin(9600);
   Serial.println();
   Serial.println("Booting Sketch...");

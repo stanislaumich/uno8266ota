@@ -12,6 +12,7 @@
 #endif
 
 
+
 ESP8266WebServer httpServer(80);
 ESP8266HTTPUpdateServer httpUpdater;
 
@@ -32,12 +33,18 @@ String getContentType(String filename) {
   return "text/plain";
  }
 
+void handlebeep(void){
+  //int t1 = httpServer.arg("t1").toInt();
+  //int t2 = httpServer.arg("t2").toInt();
+  beep(httpServer.arg("t1").toInt(),httpServer.arg("t2").toInt());
+  httpServer.sendHeader("Connection", "close");
+  httpServer.send(200, "text/plain", "Ok beep "); 
+ } 
 
 bool handleFileRead(String path) {  
   if (path.endsWith("/")) path += "index.htm";
   String contentType = getContentType(path);
-  String pathWithGz = path + ".gz";
-  
+  String pathWithGz = path + ".gz";  
   if (SPIFFS.exists(pathWithGz) || SPIFFS.exists(path)) {
     if (SPIFFS.exists(pathWithGz))
       path += ".gz";
@@ -45,9 +52,11 @@ bool handleFileRead(String path) {
     size_t sent = httpServer.streamFile(file, contentType);
     file.close();
     return true;
-  }
-  
+    Serial.println("True");
+  } 
+  Serial.println("False");
   return false;
+  
  }
 
 
@@ -55,12 +64,12 @@ bool handleFileRead(String path) {
 
 
 void MyWebinit(void){
-  
+  SPIFFS.begin();
   httpUpdater.setup(&httpServer);
  
   
 
-
+  httpServer.on("/beep",handlebeep);
   httpServer.onNotFound([]() {
     if (!handleFileRead(httpServer.uri()))
       httpServer.send(404, "text/plain", "FileNotFound");      
@@ -68,6 +77,6 @@ void MyWebinit(void){
 
 
   httpServer.begin();
-  //Serial.println(WiFi.localIP);
+ 
   Serial.print("HTTPUpdateServer ready! Open http://192.168.1.234/update in your browser\n");
  }
