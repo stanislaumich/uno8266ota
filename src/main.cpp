@@ -1,44 +1,51 @@
-/*To upload through terminal you can use: curl -F "image=@firmware.bin" esp8266-webupdate.local/update*/
-#include <Arduino.h>
+/*
+  To upload through terminal you can use: curl -F "image=@firmware.bin" esp8266-webupdate.local/update
+*/
 #include <ESP8266WiFi.h>
 #include <WiFiClient.h>
 #include <ESP8266WebServer.h>
-//#include <Update.h>
-#include <FS.h>
-#ifndef Common
+#include <ESP8266HTTPUpdateServer.h>
+////////////////
+#ifndef common
  #include "common.h"
-#endif
-#ifndef SettingsWiFi
- #include "SettingsWiFi.h"
 #endif 
-#ifndef MyWebServer
- #include "MyWebServer.h"
-#endif
-#ifndef MyTime
-#include "MyTime.h"
+/*
+#ifndef STASSID
+#define STASSID "SAN"
+#define STAPSK  "37212628"
 #endif
 
- 
+IPAddress ip(192,168,1,234);  
+IPAddress gateway(192,168,1,1);
+IPAddress subnet(255,255,255,0);
+IPAddress dns1(194,158,196,137);
+IPAddress dns2(194,158,196,141);
+*/
 
-//int interval=1000;
+const char* ssid = STASSID;
+const char* password = STAPSK;
+
+ESP8266WebServer httpServer(80);
+ESP8266HTTPUpdateServer httpUpdater;
 
 void setup(void) {
-  Button_init();
-  beep(200,2000);
-  FS_init();
-  addds("Starting :-)");
-  Serial.begin(115200);
+  Serial.begin(9600);
   Serial.println();
-  Serial.println("Starting :-)");  
-  WiFiInit();
-  screentimeout=50000;
- }
-
-void loop(void) {  
-  server.handleClient();
-  clok();
-  if (millis()>screencur+screentimeout){
-   screentimeout=screentimeoutr; 
-   screenoff();
+  Serial.println("Booting Sketch...");
+  WiFi.mode(WIFI_AP_STA);
+  WiFi.config(ip, gateway, subnet, dns1, dns2);
+  WiFi.begin(ssid, password);
+  while (WiFi.waitForConnectResult() != WL_CONNECTED) {
+    WiFi.begin(ssid, password);
+    Serial.println("WiFi failed, retrying.");
   }
+  httpUpdater.setup(&httpServer);
+  httpServer.begin();
+  //Serial.println(WiFi.localIP);
+  Serial.print("HTTPUpdateServer ready! Open http://192.168.1.234/update in your browser\n");
+}
+
+void loop(void) {
+  httpServer.handleClient();
+  
 }

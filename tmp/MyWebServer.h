@@ -8,7 +8,7 @@
  #include "common.h"
 #endif 
 //#define FS_NO_GLOBALS
-WebServer server(80);
+ESP8266WebServer server(80);
 File fsUploadFile;
 String XML;
 const char* serverIndex = "<form method='POST' action='/update' enctype='multipart/form-data'><input type='file' name='update'><input type='submit' value='Update'></form>";
@@ -17,8 +17,8 @@ const char* serverIndex = "<form method='POST' action='/update' enctype='multipa
 void FS_init(void){ 
   SPIFFS.begin();
   addds("SPIFFS.begin()");
-  prefs.begin("alarm_h",false);
-  prefs.begin("alarm_m",false);
+  //prefs.begin("alarm_h",false);
+  //prefs.begin("alarm_m",false);
  }
 
 String getContentType(String filename) {
@@ -104,7 +104,7 @@ void handleFileCreate() {
  }
 
 
-void handleFileList() {  
+/*void handleFileList() {  
   if (!server.hasArg("dir")) {
     server.send(500, "text/plain", "BAD ARGS");
     return;
@@ -128,7 +128,7 @@ void handleFileList() {
   output += "]";  
   server.send(200, "text/json", output);
  }
-
+*/
 
 
 String millis2time(){
@@ -161,8 +161,8 @@ String alert_h(){
   String Time ="";
   int m=0;
   int h=0;
-  h = prefs.getInt("alarm_h", 0);
-  m = prefs.getInt("alarm_m",0);
+  h = 0;//prefs.getInt("alarm_h", 0);
+  m = 0;//prefs.getInt("alarm_m",0);
   Time+= (String)h+":";
   Time+= (String)m; 
   return Time;
@@ -231,7 +231,7 @@ void handlereboot(){
   ESP.restart();
  }
 void handleShowTime(void){
-  screentimeout=50000;
+  //screentimeout=50000;
   String s="Long time ago...";
   addds(s);
   server.sendHeader("Connection", "close");
@@ -275,7 +275,7 @@ void initWebServer(void){
         Serial.setDebugOutput(true);
         Serial.printf("Update: %s\n", upload.filename.c_str());
         beep(200,50);
-        fStr="UPDATING.....";
+        //fStr="UPDATING.....";
         addds(upload.filename.c_str());
         addds("");
         addds("");
