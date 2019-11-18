@@ -1,6 +1,6 @@
 #define MyTime
 #include "WiFiClient.h"
-#include <Preferences.h>
+//#include <Preferences.h>
 #ifndef Common
  #include "common.h"
 #endif 

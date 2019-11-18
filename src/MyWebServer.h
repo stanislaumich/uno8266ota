@@ -1,8 +1,8 @@
 #define MyWebServer
-#include <WebServer.h>
-#include <Update.h>
-#include "SPIFFS.h"
-#include "FS.h"
+#include <ESP8266WebServer.h>
+//#include <Update.h>
+//#include <SPIFFS.h>
+#include <FS.h>
 #include "MyTime.h"
 #ifndef Common
  #include "common.h"

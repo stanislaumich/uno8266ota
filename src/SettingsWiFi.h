@@ -1,10 +1,10 @@
 #define SettingsWiFi
-#include <WiFi.h>
+#include <ESP8266WiFi.h>
 #include <WiFiClient.h>
 #ifndef Common
  #include "common.h"
 #endif
-#include <esp_wifi.h> 
+//#include <esp_wifi.h> 
 #ifndef MyWebServer
  #include "MyWebServer.h"
 #endif
@@ -24,7 +24,7 @@ IPAddress dns2(194,158,196,141);
 unsigned long int tm;
 
 
-
+/*
 String getSsidPass( String s ){
   String val = "NONE";  // if invalid, returns "NONE"
   s.toUpperCase();
@@ -42,7 +42,7 @@ String getSsidPass( String s ){
    }
   return val;
  }
-
+*/
 void WiFiInit(void){
   WiFi.mode(WIFI_AP_STA);
   WiFi.config(ip, gateway, subnet, dns1, dns2);
