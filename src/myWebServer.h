@@ -38,7 +38,8 @@ void handlebeep(void){
   //int t2 = httpServer.arg("t2").toInt();
   beep(httpServer.arg("t1").toInt(),httpServer.arg("t2").toInt());
   httpServer.sendHeader("Connection", "close");
-  httpServer.send(200, "text/plain", "Ok beep "); 
+  httpServer.send(200, "text/plain", "Ok beep ");
+  Serial.println("Beep"); 
  } 
 
 bool handleFileRead(String path) {  

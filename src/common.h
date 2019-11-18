@@ -1,6 +1,6 @@
 #define common
 
-#define pinp 2
+#define pinp D2
 
 void beep(int t1,int t2){
  unsigned long h;
