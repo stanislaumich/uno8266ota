@@ -12,29 +12,18 @@
 #ifndef myWiFi
  #include "myWiFi.h"
 #endif
+#ifndef myWeb
+ #include "myWebServer.h"
+#endif
 
 
-const char* ssid = STASSID;
-const char* password = STAPSK;
-
-ESP8266WebServer httpServer(80);
-ESP8266HTTPUpdateServer httpUpdater;
 
 void setup(void) {
   Serial.begin(9600);
   Serial.println();
   Serial.println("Booting Sketch...");
-  WiFi.mode(WIFI_AP_STA);
-  WiFi.config(ip, gateway, subnet, dns1, dns2);
-  WiFi.begin(ssid, password);
-  while (WiFi.waitForConnectResult() != WL_CONNECTED) {
-    WiFi.begin(ssid, password);
-    Serial.println("WiFi failed, retrying.");
-  }
-  httpUpdater.setup(&httpServer);
-  httpServer.begin();
-  //Serial.println(WiFi.localIP);
-  Serial.print("HTTPUpdateServer ready! Open http://192.168.1.234/update in your browser\n");
+  MyWiFiInit();
+  MyWebinit();
 }
 
 void loop(void) {

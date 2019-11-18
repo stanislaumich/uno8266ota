@@ -10,3 +10,17 @@ IPAddress gateway(192,168,1,1);
 IPAddress subnet(255,255,255,0);
 IPAddress dns1(194,158,196,137);
 IPAddress dns2(194,158,196,141);
+
+
+const char* ssid = STASSID;
+const char* password = STAPSK;
+
+void MyWiFiInit(void){
+ WiFi.mode(WIFI_AP_STA);
+  WiFi.config(ip, gateway, subnet, dns1, dns2);
+  WiFi.begin(ssid, password);
+  while (WiFi.waitForConnectResult() != WL_CONNECTED) {
+    WiFi.begin(ssid, password);
+    Serial.println("WiFi failed, retrying...");
+  }
+ }
