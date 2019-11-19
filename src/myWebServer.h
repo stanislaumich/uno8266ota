@@ -229,6 +229,7 @@ void handleXML(){
  }
 void handlereboot(){
   String s="Rebooting, refresh page";
+  httpServer.sendHeader("Connection", "close");
   httpServer.send(200,"text/html",s);
   ESP.restart();
  }
