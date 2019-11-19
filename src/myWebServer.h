@@ -250,7 +250,6 @@ void MyWebinit(void){
   SPIFFS.begin();
   httpUpdater.setup(&httpServer);
   httpServer.on("/beep",handlebeep);
-
   ////////////////////////////////////////////
   httpServer.on("/reboot",handlereboot);
   httpServer.on("/xml",handleXML);
@@ -278,5 +277,5 @@ void MyWebinit(void){
 
   httpServer.begin();
  
-  Serial.print("HTTPUpdateServer ready! Open http://192.168.1.234/update in your browser\n");
+  Serial.print("HTTPUpdateServer ready! Open http://192.168.0.234/update in your browser\n");
  }
