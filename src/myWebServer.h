@@ -6,15 +6,22 @@
 #include <fs.h>
 #ifndef common
  #include "common.h"
-#endif 
+ #endif 
 #ifndef myWiFi
  #include "myWiFi.h"
-#endif
-
-
+ #endif
+#ifndef myTime
+ #include "myTime.h"
+ #endif
 
 ESP8266WebServer httpServer(80);
 ESP8266HTTPUpdateServer httpUpdater;
+File fsUploadFile;
+String XML;
+
+void Log(String s){
+  Serial.println(s);
+ }
 
 String getContentType(String filename) {
   if (httpServer.hasArg("download")) return "application/octet-stream";
@@ -45,7 +52,7 @@ void handlebeep(void){
 bool handleFileRead(String path) {  
   if (path.endsWith("/")) path += "index.htm";
   String contentType = getContentType(path);
-  String pathWithGz = path + ".gz";  
+  String pathWithGz = path + ".gz";
   if (SPIFFS.exists(pathWithGz) || SPIFFS.exists(path)) {
     if (SPIFFS.exists(pathWithGz))
       path += ".gz";
@@ -53,12 +60,187 @@ bool handleFileRead(String path) {
     size_t sent = httpServer.streamFile(file, contentType);
     file.close();
     return true;
-    Serial.println("True");
-  } 
-  Serial.println("False");
+  }
   return false;
-  
  }
+
+void handleFileUpload() {
+  Log("Upload file");
+  if (httpServer.uri() != "/edit") return;
+  HTTPUpload& upload = httpServer.upload();
+  if (upload.status == UPLOAD_FILE_START) {
+    String filename = upload.filename;
+    if (!filename.startsWith("/")) filename = "/" + filename;
+    fsUploadFile = SPIFFS.open(filename, "w");
+    filename = String();
+  } else if (upload.status == UPLOAD_FILE_WRITE) {
+    //DBG_OUTPUT_PORT.print("handleFileUpload Data: "); DBG_OUTPUT_PORT.println(upload.currentSize);
+    if (fsUploadFile)
+      fsUploadFile.write(upload.buf, upload.currentSize);
+  } else if (upload.status == UPLOAD_FILE_END) {
+    if (fsUploadFile)
+      fsUploadFile.close();
+  }
+ }
+
+void handleFileDelete() {
+  Log("Delete file");
+  if (httpServer.args() == 0) return httpServer.send(500, "text/plain", "BAD ARGS");
+  String path = httpServer.arg(0);
+  if (path == "/")
+    return httpServer.send(500, "text/plain", "BAD PATH");
+  if (!SPIFFS.exists(path))
+    return httpServer.send(404, "text/plain", "FileNotFound");
+  SPIFFS.remove(path);
+  httpServer.send(200, "text/plain", "");
+  path = String();
+ }
+void handleFileCreate() {
+  Log("Create file");
+  if (httpServer.args() == 0)
+    return httpServer.send(500, "text/plain", "BAD ARGS");
+  String path = httpServer.arg(0);
+  if (path == "/")
+    return httpServer.send(500, "text/plain", "BAD PATH");
+  if (SPIFFS.exists(path))
+    return httpServer.send(500, "text/plain", "FILE EXISTS");
+  File file = SPIFFS.open(path, "w");
+  if (file)
+    file.close();
+  else
+    return httpServer.send(500, "text/plain", "CREATE FAILED");
+ httpServer.send(200, "text/plain", "");
+  path = String();  
+ }
+
+
+void handleFileList() {  
+  if (!httpServer.hasArg("dir")) {
+    httpServer.send(500, "text/plain", "BAD ARGS");
+    return;
+  }
+  // https://techtutorialsx.com/2019/02/24/esp32-arduino-listing-files-in-a-spiffs-file-system-specific-path/
+  String path = httpServer.arg("dir");
+  File dir = SPIFFS.open(path);
+  path = String();
+  String output = "[";
+  while (File entry=dir.openNextFile()) {
+    //File entry = dir.openNextFile();
+    if (output != "[") output += ',';
+    bool isDir = false;
+    output += "{\"type\":\"";
+    output += (isDir) ? "dir" : "file";
+    output += "\",\"name\":\"";
+    output += String(entry.name()).substring(1);
+    output += "\"}";
+    entry.close();
+  }
+  output += "]";  
+  httpServer.send(200, "text/json", output);
+ }
+
+
+
+String millis2time(){
+  String Time="";
+  unsigned long ss;
+  byte mm,hh;
+  ss=millis()/1000;
+  hh=ss/3600;
+  mm=(ss-hh*3600)/60;
+  ss=(ss-hh*3600)-mm*60;
+  if(hh<10)Time+="0";
+  Time+=(String)hh+":";
+  if(mm<10)Time+="0";
+  Time+=(String)mm+":";
+  if(ss<10)Time+="0";
+  Time+=(String)ss;
+  return Time;
+ }
+
+
+
+void handle_Button() {
+  int state = httpServer.arg("state").toInt();
+  Button(state);
+  httpServer.sendHeader("Connection", "close");
+  httpServer.send(200, "text/plain", "Ok");  
+ }
+
+String alert_h(){
+  String Time ="";
+  int m=0;
+  int h=0;
+  h = 121;//prefs.getInt("alarm_h", 0);
+  m = 122;//prefs.getInt("alarm_m",0);
+  Time+= (String)h+":";
+  Time+= (String)m; 
+  return Time;
+ }
+
+String XmlTime(void) {
+  String Time ="";
+  uint16_t m = ( ntp_time / 60 ) % 60;
+  uint16_t h = ( ntp_time / 3600 ) % 24;
+  Time+= (String)h+":";
+  Time+= (String)m; 
+  return Time;
+ }
+void handle_Time() {
+  int h = httpServer.arg("h").toInt();
+  int m = httpServer.arg("m").toInt();
+  String Time ="";
+  Time+= (String)h+":";
+  Time+= (String)m; 
+  size_t q1 = 121;//prefs.putInt("alarm_h", h);
+  size_t q2 = 122;//prefs.putInt("alarm_m", m);
+  h = 121;//prefs.getInt("alarm_h",0);
+  m = 122;//prefs.getInt("alarm_m", 0);
+  Time="";
+  Time+= (String)h+":";
+  Time+= (String)m; 
+ }
+void buildXML(){
+  XML="<?xml version='1.0'?>";
+  XML+="<Donnees>"; 
+    XML+="<response>";
+    XML+=millis2time();
+    XML+="</response>";
+    XML+="<alert_time>";
+    XML+=alert_h();
+    XML+="</alert_time>";
+    XML+="<time>";
+    XML+=XmlTime();
+    XML+="</time>";
+    XML+="<b0>";
+    XML+=XMLb0;
+    XML+="</b0>";
+    XML+="<b1>";
+    XML+=XMLb1;
+    XML+="</b1>";
+    XML+="<b2>";
+    XML+=XMLb2;
+    XML+="</b2>";
+  XML+="</Donnees>"; 
+ }
+void handleXML(){
+  buildXML();
+  httpServer.send(200,"text/xml",XML);
+ }
+void handlereboot(){
+  String s="Rebooting, refresh page";
+  httpServer.send(200,"text/html",s);
+  ESP.restart();
+ }
+void handleShowTime(void){
+  //screentimeout=50000;
+  String s="Long time ago...";
+  Log(s);
+  httpServer.sendHeader("Connection", "close");
+  httpServer.send(200,"text/html",s);
+ }
+
+
 
 
 
@@ -67,10 +249,27 @@ bool handleFileRead(String path) {
 void MyWebinit(void){
   SPIFFS.begin();
   httpUpdater.setup(&httpServer);
- 
-  
-
   httpServer.on("/beep",handlebeep);
+
+  ////////////////////////////////////////////
+  httpServer.on("/reboot",handlereboot);
+  httpServer.on("/xml",handleXML);
+  httpServer.on("/list", HTTP_GET, handleFileList);
+  httpServer.on("/Time", HTTP_GET, handle_Time);
+  httpServer.on("/Button", handle_Button);
+  httpServer.on("/time",handleShowTime);
+  httpServer.on("/edit", HTTP_GET, []() {
+    if (!handleFileRead("/edit.htm")) httpServer.send(404, "text/plain", "FileNotFound");
+   });
+  httpServer.on("/edit", HTTP_PUT, handleFileCreate);
+  httpServer.on("/edit", HTTP_DELETE, handleFileDelete);
+  httpServer.on("/edit", HTTP_POST, []() {
+    httpServer.sendHeader("Connection", "close");//my
+    httpServer.send(200, "text/plain", "");
+   }, handleFileUpload);
+
+
+  ////////////////////////////////////////////
   httpServer.onNotFound([]() {
     if (!handleFileRead(httpServer.uri()))
       httpServer.send(404, "text/plain", "FileNotFound");      
