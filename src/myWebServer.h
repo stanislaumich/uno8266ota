@@ -3,7 +3,7 @@
 #include <WiFiClient.h>
 #include <ESP8266WebServer.h>
 #include <ESP8266HTTPUpdateServer.h>
-#include <fs.h>
+#include "FS.h"
 #ifndef common
  #include "common.h"
  #endif 
@@ -121,11 +121,11 @@ void handleFileList() {
   }
   // https://techtutorialsx.com/2019/02/24/esp32-arduino-listing-files-in-a-spiffs-file-system-specific-path/
   String path = httpServer.arg("dir");
-  File dir = SPIFFS.open(path);
+  Dir dir = SPIFFS.openDir(path);
   path = String();
   String output = "[";
-  while (File entry=dir.openNextFile()) {
-    //File entry = dir.openNextFile();
+  while (dir.next()) {
+    File entry = dir.openFile("r");
     if (output != "[") output += ',';
     bool isDir = false;
     output += "{\"type\":\"";
