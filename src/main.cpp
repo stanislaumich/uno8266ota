@@ -15,19 +15,32 @@
 #ifndef myWeb
  #include "myWebServer.h"
 #endif
-
+#ifndef myTime
+ #include "myTime.h"
+#endif
+unsigned long prevmillis;
+#define interval1 1000
 
 
 void setup(void) {
   initCommon();
-  Serial.begin(9600);
+  beep(125,50);
+  Serial.begin(115200);
   Serial.println();
   Serial.println("Booting Sketch...");
   MyWiFiInit();
+  MyTimeInit();
   MyWebinit();
+  beep(125,50); 
 }
 
 void loop(void) {
   httpServer.handleClient();
-  
+  clok();
+  if (millis()-interval1>prevmillis){
+    prevmillis=millis();
+    Serial.print(hour);Serial.print(":");
+    Serial.print(mins);Serial.print(":");
+    Serial.println(sec);    
+  }
 }
