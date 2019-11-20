@@ -36,6 +36,7 @@ void setup(void) {
   MyTimeInit();
   MyWebinit();
   MyTeleBotInit();
+  bot.sendMessage(myTele, "Бот запущен>", "");
   beep(125,50); 
 }
 
