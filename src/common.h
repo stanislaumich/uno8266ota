@@ -1,5 +1,5 @@
 #define common
-
+#include <EEPROM.h>
 #define pinp D2
 
 int XMLb0;
@@ -19,7 +19,7 @@ void beep(int t1,int t2){
 
 void mLog(String s){
   Serial.println(s);
-}
+ }
 
 void Button(int state){
  switch (state) {
@@ -48,6 +48,7 @@ void Button(int state){
  } 
 
 void initCommon(void){
+  EEPROM.begin(512);
   pinMode(pinp,OUTPUT);
   digitalWrite(pinp,LOW);
  }

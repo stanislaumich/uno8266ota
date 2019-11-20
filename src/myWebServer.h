@@ -4,6 +4,7 @@
 #include <ESP8266WebServer.h>
 #include <ESP8266HTTPUpdateServer.h>
 #include "FS.h"
+#include <EEPROM.h>
 #ifndef common
  #include "common.h"
  #endif 
@@ -171,8 +172,8 @@ String alert_h(){
   String Time ="";
   int m=0;
   int h=0;
-  h = 121;//prefs.getInt("alarm_h", 0);
-  m = 122;//prefs.getInt("alarm_m",0);
+  h = EEPROM.read(0);
+  m = EEPROM.read(1);
   Time+= (String)h+":";
   Time+= (String)m; 
   return Time;
@@ -192,10 +193,11 @@ void handle_Time() {
   String Time ="";
   Time+= (String)h+":";
   Time+= (String)m; 
-  size_t q1 = 121;//prefs.putInt("alarm_h", h);
-  size_t q2 = 122;//prefs.putInt("alarm_m", m);
-  h = 121;//prefs.getInt("alarm_h",0);
-  m = 122;//prefs.getInt("alarm_m", 0);
+  EEPROM.write(0, h); 
+  EEPROM.write(1, m);
+  EEPROM.commit();
+  h = EEPROM.read(0);
+  m = EEPROM.read(1);
   Time="";
   Time+= (String)h+":";
   Time+= (String)m; 

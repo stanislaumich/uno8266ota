@@ -36,9 +36,9 @@ WiFiUDP udp;
 void DisplayTime(void) {
   uint16_t m = ( ntp_time / 60 ) % 60;
   uint16_t h = ( ntp_time / 3600 ) % 24;
-  /*
-  int th = prefs.getInt("alarm_h", 0);
-  int tm = prefs.getInt("alarm_m", 0);  
+  
+  int th = EEPROM.read(0);
+  int tm = EEPROM.read(1);  
   if (th == h && tm == m ) {
     //addds("ALARMA!!!!");
     Serial.write("ALARMA!!!!");
@@ -49,7 +49,7 @@ void DisplayTime(void) {
     beep(200,250);
     delay(300);
   }
-  */
+ 
   if (gm!=m){
     String Time ="";
     if (h<10){Time+= "0"+(String)h+":";}else{Time+= (String)h+":";}
