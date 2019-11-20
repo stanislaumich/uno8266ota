@@ -5,6 +5,9 @@
 #ifndef myWiFi
  #include "myWiFi.h"
 #endif
+#ifndef MyTeleBot
+  #include "myTeleBot.h"
+ #endif
 #include <WiFiUdp.h>
 #include <EEPROM.h>
 
@@ -58,7 +61,7 @@ void DisplayTime(void) {
     Serial.println(timestr);
     //addds(timestr);    
     }
-  if ((m==0)&&(gh!=h)){beep(150,125);z=true;}  
+  if ((m==0)&&(gh!=h)){beep(150,125);z=true;bot.sendMessage(myTele, "Zero Time!!", "");}  
   if ((m==30)&&(z)){beep(150,60);z=false;}  
   gh=h;
   gm=m;

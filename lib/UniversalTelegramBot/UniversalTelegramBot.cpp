@@ -34,7 +34,7 @@
  */
 
 #include "UniversalTelegramBot.h"
-#define _debug true
+//#define _debug true
 UniversalTelegramBot::UniversalTelegramBot(String token, Client &client) {
   _token = token;
   this->client = &client;

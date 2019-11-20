@@ -39,30 +39,18 @@ void setup(void) {
   beep(125,50); 
 }
 
-void loop(void) {
-  if (millis() > Bot_lasttime + Bot_mtbs)  {
-    Serial.println("Bot time");
-    int numNewMessages = bot.getUpdates(bot.last_message_received + 1);
-   
-    while(numNewMessages) {
-      Serial.println("got response");
-      handleNewMessages(numNewMessages);
-      numNewMessages = bot.getUpdates(bot.last_message_received + 1);
-    }
-    Serial.println("Bot time stop");
-    Bot_lasttime = millis();
-  } 
-  /////////////////////////
-
-
-  httpServer.handleClient();
-  clok();
-  if (millis()-interval1>prevmillis){
+void goSerialTime(void){
+if (millis()-interval1>prevmillis){
     prevmillis=millis();
     Serial.print(hour);Serial.print(":");
     Serial.print(mins);Serial.print(":");
     Serial.println(sec);    
   }
+}
 
-   
+void loop(void) {
+  goBot();
+  httpServer.handleClient();
+  clok();
+  goSerialTime();   
 }

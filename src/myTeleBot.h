@@ -3,13 +3,10 @@
 //#ifndef myWiFi
 // #include "myWiFi.h"
 // #endif
-//#define USING_AXTLS
 #include <ESP8266WiFi.h>
 #include <WiFiClientSecure.h>
-
-//#include "WiFiClientSecureAxTLS.h"
-//using namespace axTLS;
 #include <UniversalTelegramBot.h>
+#define myTele "357390016"
 
 #define BOTtoken "947749033:AAF00_fgJ0JTYF2XsZE_0zbz-8aZwtdHb-M"  //token of FlashledBOT
 //#define BOTname "Lz42-8266"
@@ -48,6 +45,11 @@ void handleNewMessages(int numNewMessages) {
       bot.sendMessage(chat_id, "Led is OFF", "");
     }
 
+    if (text == "/beep") {
+      beep(250,125);
+      bot.sendMessage(chat_id, from_name+", I'm beeping, "/*+chat_id*/, "");
+    }
+
     if (text == "/status") {
       if(ledStatus){
         bot.sendMessage(chat_id, "Led is ON", "");
@@ -72,7 +74,18 @@ void MyTeleBotInit(void){
   client.setInsecure(); 
 } 
 
-
+void goBot(void){
+    if (millis() > Bot_lasttime + Bot_mtbs)  {
+    int numNewMessages = bot.getUpdates(bot.last_message_received + 1);
+   
+    while(numNewMessages) {
+      Serial.println("got response");
+      handleNewMessages(numNewMessages);
+      numNewMessages = bot.getUpdates(bot.last_message_received + 1);
+    }
+    Bot_lasttime = millis();
+  } 
+}
 
 
 
