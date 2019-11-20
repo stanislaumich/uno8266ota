@@ -59,7 +59,7 @@ void DisplayTime(void) {
     //addds(timestr);    
     }
   if ((m==0)&&(gh!=h)){beep(150,125);z=true;}  
-  if ((m==30)&&(z)){beep(150,125);z=false;}  
+  if ((m==30)&&(z)){beep(150,60);z=false;}  
   gh=h;
   gm=m;
   

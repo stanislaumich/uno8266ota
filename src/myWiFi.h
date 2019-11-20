@@ -1,6 +1,7 @@
 #define myWiFi
 #include <ESP8266WiFi.h>
-#include <WiFiClient.h>
+//#include <WiFiClient.h>
+#include <WiFiClientSecure.h>
 #include "place.h"
 
 
