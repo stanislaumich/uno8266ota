@@ -22,8 +22,7 @@
 #ifndef MyTeleBot
   #include "myTeleBot.h"
  #endif
-unsigned long prevmillis;
-#define interval1 1000
+
 
 
 void setup(void) {
@@ -40,14 +39,7 @@ void setup(void) {
   beep(125,50); 
 }
 
-void goSerialTime(void){
-if (millis()-interval1>prevmillis){
-    prevmillis=millis();
-    Serial.print(hour);Serial.print(":");
-    Serial.print(mins);Serial.print(":");
-    Serial.println(sec);    
-  }
-}
+
 
 void loop(void) {
   goBot();
