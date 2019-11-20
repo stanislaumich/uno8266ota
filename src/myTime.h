@@ -6,6 +6,7 @@
  #include "myWiFi.h"
 #endif
 #include <WiFiUdp.h>
+#include <EEPROM.h>
 
 unsigned long localPort = 2390;  
 unsigned long ntp_time = 0;
@@ -21,9 +22,9 @@ int gm;
 char* wd[7]={"SU","MO","TU","WE","TH","FR","SA"};
 int weekday;
 uint8_t hour, mins, sec;
-
+bool z=true;
 #define TIMEZONE 3
-
+String timestr;
 
 
 IPAddress timeServerIP; 
@@ -32,14 +33,14 @@ const int NTP_PACKET_SIZE = 48;
 byte packetBuffer[NTP_PACKET_SIZE]; 
 WiFiUDP udp;
   // Каждые 0.5 секунды выдаем время
-/*void DisplayTime(void) {
+void DisplayTime(void) {
   uint16_t m = ( ntp_time / 60 ) % 60;
   uint16_t h = ( ntp_time / 3600 ) % 24;
-  
+  /*
   int th = prefs.getInt("alarm_h", 0);
   int tm = prefs.getInt("alarm_m", 0);  
   if (th == h && tm == m ) {
-    addds("ALARMA!!!!");
+    //addds("ALARMA!!!!");
     Serial.write("ALARMA!!!!");
     beep(200,250);
     delay(300);
@@ -48,19 +49,22 @@ WiFiUDP udp;
     beep(200,250);
     delay(300);
   }
+  */
   if (gm!=m){
     String Time ="";
     if (h<10){Time+= "0"+(String)h+":";}else{Time+= (String)h+":";}
     if (m<10){Time+= "0"+(String)m;}else{Time+= (String)m;} 
     timestr=Time+(String)" "+(String)wd[weekday];
-    addds(timestr);    
+    Serial.println(timestr);
+    //addds(timestr);    
     }
-  if ((m==0)&&(gh!=h)){beep(150,125);}  
+  if ((m==0)&&(gh!=h)){beep(150,125);z=true;}  
+  if ((m==30)&&(z)){beep(150,125);z=false;}  
   gh=h;
   gm=m;
   
  }
-*/
+
 
 unsigned long sendNTPpacket(IPAddress& address) {
   Serial.println("sending NTP packet...");
