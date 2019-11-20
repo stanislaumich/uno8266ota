@@ -134,7 +134,8 @@ void clok() {
     hour = ( ntp_time / 3600 ) % 24;
     sec=ntp_time % 60;
     points = !points;
-   }  
+   }
+   DisplayTime();  
  }
 void MyTimeInit(void){
      udp.begin(localPort);
