@@ -11,15 +11,15 @@
 #include <UniversalTelegramBot.h>
 #define myTele "357390016"
 
-#define BOTtoken "947749033:AAF00_fgJ0JTYF2XsZE_0zbz-8aZwtdHb-M"  //token of FlashledBOT
+#define BOTtoken "947749033:AAF00_fgJ0JTYF2XsZE_0zbz-8aZwtdHb-M"
 //#define BOTname "Lz42-8266"
 //#define BOTusername "Lz428266Bot"
 
 BearSSL::WiFiClientSecure client;
 UniversalTelegramBot bot(BOTtoken, client); 
  
-int Bot_mtbs = 1000; //mean time between scan messages
-long Bot_lasttime;   //last time messages' scan has been done
+int Bot_mtbs = 1000; 
+long Bot_lasttime;   
 bool Start = false;
 
 const int ledPin = 13;
@@ -37,27 +37,20 @@ void handleNewMessages(int numNewMessages) {
     if (from_name == "") from_name = "Guest";
 
     if (text == "/b0") {
-      //digitalWrite(ledPin, HIGH);   // turn the LED on (HIGH is the voltage level)
-      //ledStatus = 1;
       Button(0);
       bot.sendMessage(chat_id, "Button 0", "");
     }
 
     if (text == "/b1") {
-      //ledStatus = 0;
-     // digitalWrite(ledPin, LOW);    // turn the LED off (LOW is the voltage level)
       Button(1);
       bot.sendMessage(chat_id, "Button 1", "");
     }
 
     if (text == "/b2") {
-      //ledStatus = 0;
-      //digitalWrite(ledPin, LOW);    // turn the LED off (LOW is the voltage level)
       Button(2);
       bot.sendMessage(chat_id, "Button 2", "");
     }
-    
-    //String part01 = getValue(application_command,';',0);
+
     if (text.indexOf("/bud")==0) {
       String sa = getValue(text,' ',1);
       String mess="\n";
@@ -88,25 +81,24 @@ void handleNewMessages(int numNewMessages) {
     }
 
     if (text == "/start") {
-      String welcome = "Welcome to Universal Arduino Telegram Bot library, " + from_name + ".\n";
-      welcome += "This is Flash Led Bot example.\n\n";
+      String welcome = "Arduino 8266 UNO Bot, " + from_name + ".\n";
       welcome += "/b1 : to switch the button N\n";
       welcome += "/beep : to beep\n";
+      welcome += "/bud ? : to see ringer\n";
+      welcome += "/bud 18 00 : to set ringer\n";
       welcome += "/status : Returns current status of buttons\n";
       bot.sendMessage(chat_id, welcome, "Markdown");
     }
   }
-} 
+ } 
 
 void MyTeleBotInit(void){
-  //pinMode(ledPin, OUTPUT); // initialize digital pin 2 as an output.
   client.setInsecure(); 
-} 
+ } 
 
 void goBot(void){
     if (millis() > Bot_lasttime + Bot_mtbs)  {
     int numNewMessages = bot.getUpdates(bot.last_message_received + 1);
-   
     while(numNewMessages) {
       Serial.println("got response");
       handleNewMessages(numNewMessages);
@@ -114,7 +106,7 @@ void goBot(void){
     }
     Bot_lasttime = millis();
   } 
-}
+ }
 
 
 

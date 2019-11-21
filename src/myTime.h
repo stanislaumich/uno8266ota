@@ -35,6 +35,9 @@ const char* ntpServerName = "time.nist.gov";
 const int NTP_PACKET_SIZE = 48; 
 byte packetBuffer[NTP_PACKET_SIZE]; 
 WiFiUDP udp;
+unsigned long prevmillis;
+#define interval1 1000
+
   // Каждые 0.5 секунды выдаем время
 void DisplayTime(void) {
   uint16_t m = ( ntp_time / 60 ) % 60;
@@ -142,16 +145,15 @@ void clok() {
    DisplayTime();  
  }
 
-unsigned long prevmillis;
-#define interval1 1000
+
 void goSerialTime(void){
-if (millis()-interval1>prevmillis){
+  if (millis()-interval1>prevmillis){
     prevmillis=millis();
     Serial.print(hour);Serial.print(":");
     Serial.print(mins);Serial.print(":");
     Serial.println(sec);    
-  }
-}
+   }
+ }
 
 void MyTimeInit(void){
      udp.begin(localPort);
