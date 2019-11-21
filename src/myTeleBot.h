@@ -1,8 +1,11 @@
 #ifndef MyTeleBot
 #define MyTeleBot
-//#ifndef myWiFi
-// #include "myWiFi.h"
-// #endif
+#ifndef common
+  #include "common.h"
+ #endif
+#ifndef myTime
+  #include "myTime.h"
+ #endif 
 #include <ESP8266WiFi.h>
 #include <WiFiClientSecure.h>
 #include <UniversalTelegramBot.h>
@@ -52,6 +55,23 @@ void handleNewMessages(int numNewMessages) {
       //digitalWrite(ledPin, LOW);    // turn the LED off (LOW is the voltage level)
       Button(2);
       bot.sendMessage(chat_id, "Button 2", "");
+    }
+    
+    //String part01 = getValue(application_command,';',0);
+    if (text.indexOf("/bud")==0) {
+      String sa = getValue(text,' ',1);
+      String mess="\n";
+      if (sa=="?"){
+        int tph = getBud(0);
+        int tpm = getBud(1);        
+        mess+=String(tph)+":"+String(tpm);
+      }else{
+      String sh = getValue(text,' ',1);
+      String sm = getValue(text,' ',2);
+      setBud(sh.toInt(),sm.toInt());
+      mess+="Установлено";
+      }
+      bot.sendMessage(chat_id, from_name+", "+mess, "");
     }
 
     if (text == "/beep") {
