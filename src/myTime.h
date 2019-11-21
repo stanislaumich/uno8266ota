@@ -63,7 +63,7 @@ void DisplayTime(void) {
     //addds(timestr);    
     }
   if ((m==0)&&(gh!=h)){beep(150,125);z=true;bot.sendMessage(myTele, "Zero Time!!", "");}  
-  if ((m==30)&&(z)){beep(150,60);z=false;}  
+  if ((m==30)&&(z)){beep(150,50);delay(50);beep(150,50);z=false;}  
   gh=h;
   gm=m;
   

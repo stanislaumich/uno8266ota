@@ -35,8 +35,9 @@ void setup(void) {
   MyTimeInit();
   MyWebinit();
   MyTeleBotInit();
-  bot.sendMessage(myTele, "Бот запущен: "+IP_to_String(WiFi.localIP), "");
-  bot.sendMessage(myTele,);
+  //IPAddress ip=WiFi.localIP;
+  bot.sendMessage(myTele, "Бот запущен: "+IP_to_String(WiFi.localIP()), "");
+  //bot.sendMessage(myTele,);
 
   beep(125,50); 
 }
