@@ -33,16 +33,25 @@ void handleNewMessages(int numNewMessages) {
     String from_name = bot.messages[i].from_name;
     if (from_name == "") from_name = "Guest";
 
-    if (text == "/ledon") {
-      digitalWrite(ledPin, HIGH);   // turn the LED on (HIGH is the voltage level)
-      ledStatus = 1;
-      bot.sendMessage(chat_id, "Led is ON", "");
+    if (text == "/b0") {
+      //digitalWrite(ledPin, HIGH);   // turn the LED on (HIGH is the voltage level)
+      //ledStatus = 1;
+      Button(0);
+      bot.sendMessage(chat_id, "Button 0", "");
     }
 
-    if (text == "/ledoff") {
-      ledStatus = 0;
-      digitalWrite(ledPin, LOW);    // turn the LED off (LOW is the voltage level)
-      bot.sendMessage(chat_id, "Led is OFF", "");
+    if (text == "/b1") {
+      //ledStatus = 0;
+     // digitalWrite(ledPin, LOW);    // turn the LED off (LOW is the voltage level)
+      Button(1);
+      bot.sendMessage(chat_id, "Button 1", "");
+    }
+
+    if (text == "/b2") {
+      //ledStatus = 0;
+      //digitalWrite(ledPin, LOW);    // turn the LED off (LOW is the voltage level)
+      Button(2);
+      bot.sendMessage(chat_id, "Button 2", "");
     }
 
     if (text == "/beep") {
@@ -51,19 +60,19 @@ void handleNewMessages(int numNewMessages) {
     }
 
     if (text == "/status") {
-      if(ledStatus){
-        bot.sendMessage(chat_id, "Led is ON", "");
-      } else {
-        bot.sendMessage(chat_id, "Led is OFF", "");
-      }
+      String mess="";
+      mess+="Bu 0 - "+String(getButton(0))+"\n";
+      mess+="Bu 1 - "+String(getButton(1))+"\n";
+      mess+="Bu 2 - "+String(getButton(2))+"\n";
+      bot.sendMessage(chat_id, from_name+",\n"+mess, "");
     }
 
     if (text == "/start") {
       String welcome = "Welcome to Universal Arduino Telegram Bot library, " + from_name + ".\n";
       welcome += "This is Flash Led Bot example.\n\n";
-      welcome += "/ledon : to switch the Led ON\n";
-      welcome += "/ledoff : to switch the Led OFF\n";
-      welcome += "/status : Returns current status of LED\n";
+      welcome += "/b1 : to switch the button N\n";
+      welcome += "/beep : to beep\n";
+      welcome += "/status : Returns current status of buttons\n";
       bot.sendMessage(chat_id, welcome, "Markdown");
     }
   }

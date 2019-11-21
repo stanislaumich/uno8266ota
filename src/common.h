@@ -61,3 +61,6 @@ void initCommon(void){
   pinMode(pinp,OUTPUT);
   digitalWrite(pinp,LOW);
  }
+ int getButton(int b){
+  return EEPROM.read(10+b);
+  }
