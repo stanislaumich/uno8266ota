@@ -1,5 +1,7 @@
 #define common
+#include <Arduino.h>
 #include <EEPROM.h>
+
 #define pinp D2
 
 int XMLb0;
