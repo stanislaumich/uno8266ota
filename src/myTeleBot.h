@@ -34,7 +34,7 @@ void handleNewMessages(int numNewMessages) {
     String text = bot.messages[i].text;
 
     String from_name = bot.messages[i].from_name;
-    if (from_name == "") from_name = "Guest";
+    if (from_name == "") from_name = "Неизвестный";
 
     if (text == "/b0") {
       Button(0);
@@ -69,9 +69,12 @@ void handleNewMessages(int numNewMessages) {
 
     if (text == "/beep") {
       beep(250,125);
-      bot.sendMessage(chat_id, from_name+", I'm beeping, "/*+chat_id*/, "");
+      bot.sendMessage(chat_id, from_name+", I'm beeping, ", "");
     }
-
+    if (text == "/chat") {
+      beep(250,125);
+      bot.sendMessage(chat_id, from_name+", "+chat_id, "");
+    }
     if (text == "/status") {
       String mess="";
       mess+="Bu 0 - "+String(getButton(0))+"\n";
@@ -84,6 +87,7 @@ void handleNewMessages(int numNewMessages) {
       String welcome = "Arduino 8266 UNO Bot, " + from_name + ".\n";
       welcome += "/b1 : to switch the button N\n";
       welcome += "/beep : to beep\n";
+      welcome += "/chat : to return chat_id\n";
       welcome += "/bud ? : to see ringer\n";
       welcome += "/bud 18 00 : to set ringer\n";
       welcome += "/status : Returns current status of buttons\n";
@@ -93,14 +97,14 @@ void handleNewMessages(int numNewMessages) {
  } 
 
 void MyTeleBotInit(void){
-  client.setInsecure(); 
+  client.setInsecure(); // иначе не соединяется без этой команды
  } 
 
 void goBot(void){
     if (millis() > Bot_lasttime + Bot_mtbs)  {
     int numNewMessages = bot.getUpdates(bot.last_message_received + 1);
     while(numNewMessages) {
-      Serial.println("got response");
+      //Serial.println("got response");
       handleNewMessages(numNewMessages);
       numNewMessages = bot.getUpdates(bot.last_message_received + 1);
     }
