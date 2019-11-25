@@ -22,7 +22,10 @@
 #ifndef MyTeleBot
   #include "myTeleBot.h"
  #endif
-
+ 
+#ifndef mySSDP
+  #include "mySSDP.h"
+ #endif 
 
 
 void setup(void) {
@@ -33,6 +36,7 @@ void setup(void) {
   Serial.println("Booting Sketch...");
   MyWiFiInit();
   MyTimeInit();
+  MySSDPInit();
   MyWebinit();
   MyTeleBotInit();
   bot.sendMessage(myTele, "Бот запущен: "+IP_to_String(WiFi.localIP()), "");

@@ -34,7 +34,7 @@ const char* password = STAPSK;
 
 void MyWiFiInit(void){
   WiFi.mode(WIFI_AP_STA);
-  WiFi.softAP("Uno266-234");
+  WiFi.softAP("Uno8266-234");
   WiFi.config(ip, gateway, subnet, dns1, dns2);
   WiFi.begin(ssid, password);
   while (WiFi.waitForConnectResult() != WL_CONNECTED) {
