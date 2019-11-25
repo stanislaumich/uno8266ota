@@ -82,6 +82,13 @@ void handleNewMessages(int numNewMessages) {
       mess+="Bu 2 - "+String(getButton(2))+"\n";
       bot.sendMessage(chat_id, from_name+",\n"+mess, "");
     }
+     
+    if (text == "/reboot") {
+      String mess="System is going to reboot NOW!";
+      bot.sendMessage(chat_id, from_name+",\n"+mess, "");
+      //yield(2000);
+      //ESP.restart(); //циклический ребут начинается - не отмечает сообщение
+    }
 
     if (text == "/start") {
       String welcome = "Arduino 8266 UNO Bot, " + from_name + ".\n";

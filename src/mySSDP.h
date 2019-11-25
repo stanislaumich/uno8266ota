@@ -1,12 +1,12 @@
 #ifndef mySSDP
   #define mySSDP
 #include <ESP8266SSDP.h>
-void MySSDPInit(void) {
 
+void MySSDPInit(void) {
   SSDP.setSchemaURL("description.xml");
   SSDP.setHTTPPort(80);
   SSDP.setName("Uno8266Clock1");
-  SSDP.setSerialNumber("001788102201");
+  SSDP.setSerialNumber("280119780945");
   SSDP.setURL("/");
   SSDP.setModelName("Uno8266Clock2");
   SSDP.setModelNumber("000000000001");
