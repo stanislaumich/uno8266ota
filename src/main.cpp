@@ -55,5 +55,5 @@ void loop(void) {
   httpServer.handleClient();
   clok();
   goSerialTime();
-  if (myButtonWork()){bot.sendMessage(myTele, "Button!!!!", "");}   
+  //if (myButtonWork()){beep(250,125);bot.sendMessage(myTele, "Button!!!!", "");}   
 }
