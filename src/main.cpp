@@ -54,5 +54,6 @@ void loop(void) {
   goBot();
   httpServer.handleClient();
   clok();
-  goSerialTime();   
+  goSerialTime();
+  if (myButtonWork()){bot.sendMessage(myTele, "Button!!!!", "");}   
 }

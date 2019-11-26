@@ -75,6 +75,15 @@ void handleNewMessages(int numNewMessages) {
       beep(250,125);
       bot.sendMessage(chat_id, from_name+", "+chat_id, "");
     }
+
+    if (getValue(text,' ',0) == "/int") {
+      String sa = getValue(text,' ',1);
+      int q=sa.toInt();
+      myButtonReInit(q);
+      beep(250,125);
+      bot.sendMessage(chat_id, from_name+" "+sa, "");
+    }
+
     if (text == "/status") {
       String mess="";
       mess+="Bu 0 - "+String(getButton(0))+"\n";
