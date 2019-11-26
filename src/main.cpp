@@ -9,7 +9,10 @@
 ////////////////
 #ifndef common
  #include "common.h"
- #endif 
+ #endif
+#ifndef myButton
+ #include "myButton.h"
+ #endif  
 #ifndef myWiFi
  #include "myWiFi.h"
  #endif

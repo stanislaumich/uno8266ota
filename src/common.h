@@ -2,6 +2,20 @@
 #include <Arduino.h>
 #include <EEPROM.h>
 
+
+#define NODEMCU_D0 16
+#define NODEMCU_D1 5
+#define NODEMCU_D2 4
+#define NODEMCU_D3 0
+#define NODEMCU_D4 2
+#define NODEMCU_D5 14
+#define NODEMCU_D6 12 //gpio12
+#define NODEMCU_D7 13
+#define NODEMCU_D8 15
+#define NODEMCU_D9 3
+#define NODEMCU_D10 1
+#define NODEMCU_D12 10
+
 #define pinp D2
 
 int XMLb0;
