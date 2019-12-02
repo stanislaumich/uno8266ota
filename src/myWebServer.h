@@ -15,7 +15,9 @@
 #ifndef myTime
  #include "myTime.h"
  #endif
-
+#ifndef mySSDP
+  #include"mySSDP.h"
+ #endif 
 ESP8266WebServer httpServer(80);
 ESP8266HTTPUpdateServer httpUpdater;
 File fsUploadFile;
@@ -270,7 +272,9 @@ void MyWebinit(void){
     httpServer.sendHeader("Connection", "close");//my
     httpServer.send(200, "text/plain", "");
    }, handleFileUpload);
-
+  httpServer.on("/description.xml", HTTP_GET, []() {
+    SSDP.schema(httpServer.client());
+  });
 
   ////////////////////////////////////////////
   httpServer.onNotFound([]() {
