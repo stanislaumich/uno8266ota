@@ -28,7 +28,7 @@ uint8_t hour, mins, sec;
 bool z=true;
 #define TIMEZONE 3
 String timestr;
-int budilo=0;
+volatile int budilo=0;
 
 IPAddress timeServerIP; 
 const char* ntpServerName = "time.nist.gov";
