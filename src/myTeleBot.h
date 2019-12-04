@@ -18,7 +18,7 @@
 BearSSL::WiFiClientSecure client;
 UniversalTelegramBot bot(BOTtoken, client); 
  
-String Esp32Clock="852912728";
+String Esp32Clock="Lz42Esp32Clock";
 String S868 ="519049530";
 
 int Bot_mtbs = 1000; 
@@ -60,7 +60,7 @@ void handleNewMessages(int numNewMessages) {
     }
     
     if (text == "/send") {
-      sendtobot(Esp32Clock,"Test Message!!! to bot");
+      sendtobot(Esp32Clock,"/bud ?");
       //bot.sendMessage(chat_id, "Sending!", "");      
     }
 
