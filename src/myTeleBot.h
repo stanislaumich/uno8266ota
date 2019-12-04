@@ -18,12 +18,20 @@
 BearSSL::WiFiClientSecure client;
 UniversalTelegramBot bot(BOTtoken, client); 
  
+String Esp32Clock="852912728";
+String S868 ="519049530";
+
 int Bot_mtbs = 1000; 
 long Bot_lasttime;   
 bool Start = false;
 
 const int ledPin = 13;
 int ledStatus = 0; 
+
+void sendtobot(String ch_id, String mess){
+  String m="="+ch_id+"="+mess;
+  bot.sendMessage(S868, m, "");
+}
 
 void handleNewMessages(int numNewMessages) {
   Serial.println("handleNewMessages");
@@ -49,6 +57,11 @@ void handleNewMessages(int numNewMessages) {
     if (text == "/b2") {
       Button(2);
       bot.sendMessage(chat_id, "Button 2", "");
+    }
+    
+    if (text == "/send") {
+      sendtobot(Esp32Clock,"Test Message!!! to bot");
+      //bot.sendMessage(chat_id, "Sending!", "");      
     }
 
     if (text.indexOf("/bud")==0) {
