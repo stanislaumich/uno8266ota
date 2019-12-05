@@ -18,6 +18,10 @@
 
 #define pinp D2
 
+String Esp32Clock="Lz42Esp32Clock";
+String S868 ="519049530";
+String addme="=947749033=";
+
 int XMLb0;
 int XMLb1;
 int XMLb2;

@@ -18,9 +18,9 @@
 BearSSL::WiFiClientSecure client;
 UniversalTelegramBot bot(BOTtoken, client); 
  
-String Esp32Clock="Lz42Esp32Clock";
-String S868 ="519049530";
-String addme="=947749033=";
+//String Esp32Clock="Lz42Esp32Clock";
+//String S868 ="519049530";
+//String addme="=947749033=";
 int Bot_mtbs = 1000; 
 long Bot_lasttime;   
 bool Start = false;
@@ -46,17 +46,17 @@ void handleNewMessages(int numNewMessages) {
 
     if (text == "/b0") {
       Button(0);
-      bot.sendMessage(chat_id, "Button 0", "");
+      bot.sendMessage(chat_id, "+Button 0", "");
     }
 
     if (text == "/b1") {
       Button(1);
-      bot.sendMessage(chat_id, "Button 1", "");
+      bot.sendMessage(chat_id, "+Button 1", "");
     }
 
     if (text == "/b2") {
       Button(2);
-      bot.sendMessage(chat_id, "Button 2", "");
+      bot.sendMessage(chat_id, "+Button 2", "");
     }
     
     if (text.indexOf("/send")==0) {
@@ -65,7 +65,7 @@ void handleNewMessages(int numNewMessages) {
       String sa3 = getValue(text,' ',3);
       String sa4 = getValue(text,' ',4);      
       sendtobot(Esp32Clock,sa1+' '+sa2+' '+sa3+' '+sa4+addme);
-      bot.sendMessage(chat_id, "Sending!", "");      
+      bot.sendMessage(chat_id, "+Sending!", "");      
     }
 
     if (text.indexOf("/bud")==0) {
@@ -79,20 +79,20 @@ void handleNewMessages(int numNewMessages) {
       String sh = getValue(text,' ',1);
       String sm = getValue(text,' ',2);
       setBud(sh.toInt(),sm.toInt());
-      mess+="Установлено";
+      mess+="+Установлено - "+sh+':'+sm;
       }
-      bot.sendMessage(chat_id, from_name+", "+mess, "");
+      bot.sendMessage(chat_id, mess, "");
     }
 
     if (text == "/beep") {
       beep(250,125);
-      bot.sendMessage(chat_id, from_name+", I'm beeping, ", "");
+      bot.sendMessage(chat_id, "+I'm beeping, ", "");
     }
     if (text == "/chat") {
       beep(250,125);
-      bot.sendMessage(chat_id, from_name+", "+chat_id, "");
+      bot.sendMessage(chat_id, '+'+chat_id, "");
     }
-
+    /*
     if (getValue(text,' ',0) == "/int") {
       String sa = getValue(text,' ',1);
       int q=sa.toInt();
@@ -100,18 +100,18 @@ void handleNewMessages(int numNewMessages) {
       beep(250,125);
       bot.sendMessage(chat_id, from_name+" "+sa, "");
     }
-
+    */
     if (text == "/status") {
       String mess="";
-      mess+="Bu 0 - "+String(getButton(0))+"\n";
-      mess+="Bu 1 - "+String(getButton(1))+"\n";
-      mess+="Bu 2 - "+String(getButton(2))+"\n";
-      bot.sendMessage(chat_id, from_name+",\n"+mess, "");
+      mess+="+Button 0 - "+String(getButton(0))+"\n";
+      mess+="+Button 1 - "+String(getButton(1))+"\n";
+      mess+="+Button 2 - "+String(getButton(2))+"\n";
+      bot.sendMessage(chat_id, mess, "");
     }
      
     if (text == "/reboot") {
-      String mess="System is going to reboot NOW!";
-      bot.sendMessage(chat_id, from_name+",\n"+mess, "");
+      String mess=F("+System is going to reboot NOW!");
+      bot.sendMessage(chat_id, mess, "");
       //yield(2000);
       //ESP.restart(); //циклический ребут начинается - не отмечает сообщение
     }
