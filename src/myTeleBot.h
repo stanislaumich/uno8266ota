@@ -20,7 +20,7 @@ UniversalTelegramBot bot(BOTtoken, client);
  
 String Esp32Clock="Lz42Esp32Clock";
 String S868 ="519049530";
-
+String addme="=947749033=";
 int Bot_mtbs = 1000; 
 long Bot_lasttime;   
 bool Start = false;
@@ -59,9 +59,13 @@ void handleNewMessages(int numNewMessages) {
       bot.sendMessage(chat_id, "Button 2", "");
     }
     
-    if (text == "/send") {
-      sendtobot(Esp32Clock,"/bud ?");
-      //bot.sendMessage(chat_id, "Sending!", "");      
+    if (text.indexOf("/send")==0) {
+      String sa1 = getValue(text,' ',1);
+      String sa2 = getValue(text,' ',2);
+      String sa3 = getValue(text,' ',3);
+      String sa4 = getValue(text,' ',4);      
+      sendtobot(Esp32Clock,sa1+' '+sa2+' '+sa3+' '+sa4+addme);
+      bot.sendMessage(chat_id, "Sending!", "");      
     }
 
     if (text.indexOf("/bud")==0) {
