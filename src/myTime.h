@@ -38,6 +38,23 @@ WiFiUDP udp;
 unsigned long prevmillis;
 #define interval1 1000
 
+String millis2time(){
+  String Time="";
+  unsigned long ss;
+  byte mm,hh;
+  ss=millis()/1000;
+  hh=ss/3600;
+  mm=(ss-hh*3600)/60;
+  ss=(ss-hh*3600)-mm*60;
+  if(hh<10)Time+="0";
+  Time+=(String)hh+":";
+  if(mm<10)Time+="0";
+  Time+=(String)mm+":";
+  if(ss<10)Time+="0";
+  Time+=(String)ss;
+  return Time;
+ }
+
   // Каждые 0.5 секунды выдаем время
 void DisplayTime(void) {
   uint16_t m = ( ntp_time / 60 ) % 60;

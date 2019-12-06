@@ -10,6 +10,10 @@
 #include <WiFiClientSecure.h>
 #include <UniversalTelegramBot.h>
 #define myTele "357390016"
+//#ifndef myWeb
+// #include "myWebServer.h"
+//#endif
+String millis2time();
 
 #define BOTtoken "947749033:AAF00_fgJ0JTYF2XsZE_0zbz-8aZwtdHb-M"
 //#define BOTname "Lz42-8266"
@@ -27,6 +31,24 @@ bool Start = false;
 
 const int ledPin = 13;
 int ledStatus = 0; 
+/*
+String millis2time(){
+  String Time="";
+  unsigned long ss;
+  byte mm,hh;
+  ss=millis()/1000;
+  hh=ss/3600;
+  mm=(ss-hh*3600)/60;
+  ss=(ss-hh*3600)-mm*60;
+  if(hh<10)Time+="0";
+  Time+=(String)hh+":";
+  if(mm<10)Time+="0";
+  Time+=(String)mm+":";
+  if(ss<10)Time+="0";
+  Time+=(String)ss;
+  return Time;
+ }
+*/
 
 void sendtobot(String ch_id, String mess){
   String m="="+ch_id+"="+mess;
@@ -84,6 +106,11 @@ void handleNewMessages(int numNewMessages) {
       bot.sendMessage(chat_id, mess, "");
     }
 
+    if (text == "/u") {
+      String mess="Uptime: "+millis2time();      
+      bot.sendMessage(chat_id, mess, "");
+    } 
+
     if (text == "/beep") {
       beep(250,125);
       bot.sendMessage(chat_id, "+I'm beeping, ", "");
@@ -120,8 +147,10 @@ void handleNewMessages(int numNewMessages) {
       String welcome = "Arduino 8266 UNO Bot, " + from_name + ".\n";
       welcome += "/b1 : to switch the button N\n";
       welcome += "/beep : to beep\n";
+      welcome += "/u : uptime\n";
       welcome += "/chat : to return chat_id\n";
       welcome += "/bud ? : to see ringer\n";
+      welcome += "/bud : to reset ringer\n";
       welcome += "/bud 18 00 : to set ringer\n";
       welcome += "/status : Returns current status of buttons\n";
       bot.sendMessage(chat_id, welcome, "Markdown");
