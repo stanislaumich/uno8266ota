@@ -48,18 +48,28 @@ void parsebot(String chat_id, String text){
  }
  
 String parsecommand(String comm){
+  String mess="- > "+comm;
+  if (comm == "/u") {
+      mess="+"+millis2time();      
+    }
 
-  return "+Ok";
+  return mess;
 }
 
 void answerbot(String chat_id, String text){
+  
   text.remove(0,1);
   int p = text.indexOf('=');
   String name = text.substring(0, p);
-  String comm = text.substring(p+1);
-  String res = parsecommand(comm);
+  text.remove(0,p+1);
+  p = text.indexOf('=');
+  text.remove(0,p+1);
+  text.trim();
+  // text.replace("=","^");
+  //comm = text.substring(p+1);
+  //String res = parsecommand(chat_id,comm);
   //String w= /*"="+name+"="+myName+"="+*/parsecommand(comm);
-  sendtobot(name,parsecommand(comm));
+  sendtobot(name,parsecommand(text));
  }
 
 void handleNewMessages(int numNewMessages) {
