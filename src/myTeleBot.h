@@ -9,11 +9,13 @@
 #include <ESP8266WiFi.h>
 #include <WiFiClientSecure.h>
 #include <UniversalTelegramBot.h>
-#define myTele "357390016"
+
 //#ifndef myWeb
 // #include "myWebServer.h"
 //#endif
 String millis2time();
+
+#define botdebug
 
 #define BOTtoken "947749033:AAF00_fgJ0JTYF2XsZE_0zbz-8aZwtdHb-M"
 //#define BOTname "Lz42-8266"
@@ -31,9 +33,15 @@ bool Start = false;
 
 const int ledPin = 13;
 int ledStatus = 0; 
+volatile bool debug=1;
+String from_name="";
+void execCommand(String chat_id, String command);
 
 String sendtobot(String ch_id, String mess){
   String m="="+ch_id+"="+/*myID*/myName+"="+mess;
+  if(debug){
+   bot.sendMessage("357390016", m, "");
+  } 
   bot.sendMessage(S868, m, "");
   return m;
 }
@@ -52,7 +60,10 @@ String parsecommand(String comm){
   if (comm == "/u") {
       mess="+"+millis2time();      
     }
-
+  if (comm == "/d") {
+      debug=!debug;
+      debug?mess="+TRUE":mess="+FALSE";      
+    }
   return mess;
 }
 
@@ -72,18 +83,8 @@ void answerbot(String chat_id, String text){
   sendtobot(name,parsecommand(text));
  }
 
-void handleNewMessages(int numNewMessages) {
-  Serial.println("handleNewMessages");
-  Serial.println(String(numNewMessages));
-
-  for (int i=0; i<numNewMessages; i++) {
-    String chat_id = String(bot.messages[i].chat_id);
-    String text = bot.messages[i].text;
-
-    String from_name = bot.messages[i].from_name;
-    if (from_name == "") from_name = "Неизвестный";
-
-    if (text == "/b0") {
+void execCommand(String chat_id, String text){
+   if (text == "/b0") {
       Button(0);
       bot.sendMessage(chat_id, "+Button 0", "");
     }
@@ -171,6 +172,17 @@ void handleNewMessages(int numNewMessages) {
       welcome += "/status : Returns current status of buttons\n";
       bot.sendMessage(chat_id, welcome, "Markdown");
     }
+ }
+
+void handleNewMessages(int numNewMessages) {
+  //Serial.println("handleNewMessages");
+  //Serial.println(String(numNewMessages));
+  for (int i=0; i<numNewMessages; i++) {
+    String chat_id = String(bot.messages[i].chat_id);
+    String text = bot.messages[i].text;
+    from_name = bot.messages[i].from_name;
+    if (from_name == "") from_name = "UNKNOWN";
+    execCommand(chat_id,text);
   }
  } 
 

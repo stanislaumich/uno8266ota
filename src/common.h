@@ -18,6 +18,7 @@
 
 #define pinp D2
 
+#define myTele "357390016"
 String Esp32Clock="Lz42Esp32Clock";
 String S868 ="519049530";
 String myID="947749033";
