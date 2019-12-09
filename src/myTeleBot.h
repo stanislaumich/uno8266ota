@@ -15,7 +15,7 @@
 //#endif
 String millis2time();
 
-#define botdebug
+
 
 #define BOTtoken "947749033:AAF00_fgJ0JTYF2XsZE_0zbz-8aZwtdHb-M"
 //#define BOTname "Lz42-8266"
