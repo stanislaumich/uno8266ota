@@ -46,6 +46,21 @@ void parsebot(String chat_id, String text){
       String w=sa1+' '+sa2+' '+sa3+' '+sa4;
       bot.sendMessage(chat_id, "+Sending!\n"+sendtobot(Esp32Clock,w), "");
  }
+ 
+String parsecommand(String comm){
+
+  return "+Ok";
+}
+
+void answerbot(String chat_id, String text){
+  text.remove(0,1);
+  int p = text.indexOf('=');
+  String name = text.substring(0, p);
+  String comm = text.substring(p+1);
+  String res = parsecommand(comm);
+  //String w= /*"="+name+"="+myName+"="+*/parsecommand(comm);
+  sendtobot(name,parsecommand(comm));
+ }
 
 void handleNewMessages(int numNewMessages) {
   Serial.println("handleNewMessages");
@@ -75,6 +90,10 @@ void handleNewMessages(int numNewMessages) {
     
     if (text.indexOf("/send")==0) {
       parsebot(chat_id, text);      
+    }
+
+    if (text.indexOf("=")==0) {
+      answerbot(chat_id, text);      
     }
 
     if (text.indexOf("/bud")==0) {
