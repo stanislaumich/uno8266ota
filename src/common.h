@@ -20,7 +20,8 @@
 
 String Esp32Clock="Lz42Esp32Clock";
 String S868 ="519049530";
-String addme="=947749033=";
+String myID="947749033";
+String myName="Lz42-8266";
 
 int XMLb0;
 int XMLb1;

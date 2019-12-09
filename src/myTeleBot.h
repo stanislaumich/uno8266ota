@@ -31,29 +31,21 @@ bool Start = false;
 
 const int ledPin = 13;
 int ledStatus = 0; 
-/*
-String millis2time(){
-  String Time="";
-  unsigned long ss;
-  byte mm,hh;
-  ss=millis()/1000;
-  hh=ss/3600;
-  mm=(ss-hh*3600)/60;
-  ss=(ss-hh*3600)-mm*60;
-  if(hh<10)Time+="0";
-  Time+=(String)hh+":";
-  if(mm<10)Time+="0";
-  Time+=(String)mm+":";
-  if(ss<10)Time+="0";
-  Time+=(String)ss;
-  return Time;
- }
-*/
 
-void sendtobot(String ch_id, String mess){
-  String m="="+ch_id+"="+mess;
+String sendtobot(String ch_id, String mess){
+  String m="="+ch_id+"="+/*myID*/myName+"="+mess;
   bot.sendMessage(S868, m, "");
+  return m;
 }
+
+void parsebot(String chat_id, String text){
+      String sa1 = getValue(text,' ',1);
+      String sa2 = getValue(text,' ',2);
+      String sa3 = getValue(text,' ',3);
+      String sa4 = getValue(text,' ',4);      
+      String w=sa1+' '+sa2+' '+sa3+' '+sa4;
+      bot.sendMessage(chat_id, "+Sending!\n"+sendtobot(Esp32Clock,w), "");
+ }
 
 void handleNewMessages(int numNewMessages) {
   Serial.println("handleNewMessages");
@@ -82,12 +74,7 @@ void handleNewMessages(int numNewMessages) {
     }
     
     if (text.indexOf("/send")==0) {
-      String sa1 = getValue(text,' ',1);
-      String sa2 = getValue(text,' ',2);
-      String sa3 = getValue(text,' ',3);
-      String sa4 = getValue(text,' ',4);      
-      sendtobot(Esp32Clock,sa1+' '+sa2+' '+sa3+' '+sa4+addme);
-      bot.sendMessage(chat_id, "+Sending!", "");      
+      parsebot(chat_id, text);      
     }
 
     if (text.indexOf("/bud")==0) {
